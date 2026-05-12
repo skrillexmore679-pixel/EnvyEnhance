@@ -1,0 +1,26 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "bTXNFJp9JVyTnilNAqJW3"
+uri = "file://artifacts/sakura-beauty/public/hero.png"
+type = "image"
+title = "Japanese skincare hero image"
+
+[[generated]]
+id = "awTULWbUlg4ac9u_QeXPN"
+uri = "file://artifacts/sakura-beauty/public/products/serum.png"
+type = "image"
+title = "Sakura serum product"
+
+[[generated]]
+id = "hcDBRE7psSHuqvhRnICAb"
+uri = "file://artifacts/sakura-beauty/public/products/cleanser.png"
+type = "image"
+title = "Sage cleansing oil"
+
+[[generated]]
+id = "miueFuJsCh-Xc3igfiNKu"
+uri = "file://artifacts/sakura-beauty/public/products/cream.png"
+type = "image"
+title = "Gold face cream"

@@ -1,0 +1,52 @@
+import app from "./app";
+import { logger } from "./lib/logger";
+import { archiveLastMonth } from "./routes/monthlyRecords";
+
+const rawPort = process.env["PORT"];
+
+if (!rawPort) {
+  throw new Error(
+    "PORT environment variable is required but was not provided.",
+  );
+}
+
+const port = Number(rawPort);
+
+if (Number.isNaN(port) || port <= 0) {
+  throw new Error(`Invalid PORT value: "${rawPort}"`);
+}
+
+app.listen(port, (err) => {
+  if (err) {
+    logger.error({ err }, "Error listening on port");
+    process.exit(1);
+  }
+
+  logger.info({ port }, "Server listening");
+
+  // Monthly archiving scheduler — runs every hour, archives on the 1st of the month
+  scheduleMonthlyArchive();
+});
+
+function scheduleMonthlyArchive() {
+  const CHECK_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+
+  async function tryArchive() {
+    const now = new Date();
+    if (now.getDate() === 1) {
+      try {
+        const result = await archiveLastMonth();
+        if (result.archived) {
+          logger.info({ msg: result.message }, "Monthly archive completed");
+        }
+      } catch (err) {
+        logger.error({ err }, "Monthly archive failed");
+      }
+    }
+  }
+
+  // Run once at startup in case we missed it
+  tryArchive().catch(() => {});
+
+  setInterval(tryArchive, CHECK_INTERVAL_MS);
+}
